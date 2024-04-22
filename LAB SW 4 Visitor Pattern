@@ -1,0 +1,125 @@
+// Promo.java
+public abstract class Promo {
+    public abstract String showAllowance(Telco telco, double promoPrice);
+    public abstract String showUnliCallsTextOffer(Telco telco, boolean unliCallText);
+}
+
+// UsagePromo.java
+public class UsagePromo extends Promo {
+    @Override
+    public String showAllowance(Telco telco, double promoPrice) {
+        return telco.getTelcoName() + " Data Usage Offer and price: " + promoPrice;
+    }
+
+    @Override
+    public String showUnliCallsTextOffer(Telco telco, boolean unliCallText) {
+        return "";
+    }
+}
+
+// UnliCallOffer.java
+public class UnliCallOffer extends Promo {
+    @Override
+    public String showAllowance(Telco telco, double promoPrice) {
+        return "";
+    }
+
+    @Override
+    public String showUnliCallsTextOffer(Telco telco, boolean unliCallText) {
+        return telco.getTelcoName() + " unlimited calls and text package: " + (unliCallText ? "Available" : "Not Available");
+    }
+}
+
+// Telco.java
+public abstract class Telco {
+    protected double dataAllowance;
+    protected double price;
+    protected String telcoName;
+    protected boolean unliCallText;
+
+    public Telco(double dataAllowance, double price, String telcoName, boolean unliCallText) {
+        this.dataAllowance = dataAllowance;
+        this.price = price;
+        this.telcoName = telcoName;
+        this.unliCallText = unliCallText;
+    }
+
+    public double getTelcoDataAllowance() {
+        return dataAllowance;
+    }
+
+    public double getPromoPrice() {
+        return price;
+    }
+
+    public String getTelcoName() {
+        return telcoName;
+    }
+
+    public boolean getUnliCallText() {
+        return unliCallText;
+    }
+
+    public abstract TelcoSubscription getSubscription();
+}
+
+// Smart.java
+public class Smart extends Telco {
+    public Smart(double dataAllowance, double price) {
+        super(dataAllowance, price, "Smart", false);
+    }
+
+    @Override
+    public TelcoSubscription getSubscription() {
+        return new TelcoSubscription(getTelcoDataAllowance(), getPromoPrice(), this, getUnliCallText());
+    }
+}
+
+// Globe.java
+public class Globe extends Telco {
+    public Globe(double dataAllowance, double price) {
+        super(dataAllowance, price, "Globe", true);
+    }
+
+    @Override
+    public TelcoSubscription getSubscription() {
+        return new TelcoSubscription(getTelcoDataAllowance(), getPromoPrice(), this, getUnliCallText());
+    }
+}
+
+// Ditto.java
+public class Ditto extends Telco {
+    public Ditto(double dataAllowance, double price) {
+        super(dataAllowance, price, "Ditto", true);
+    }
+
+    @Override
+    public TelcoSubscription getSubscription() {
+        return new TelcoSubscription(getTelcoDataAllowance(), getPromoPrice(), this, getUnliCallText());
+    }
+}
+
+// TelcoSubscription.java
+public class TelcoSubscription {
+    private double dataAllowance;
+    private double price;
+    private Telco telco;
+    private boolean unliCallText;
+
+    public TelcoSubscription(double dataAllowance, double price, Telco telco, boolean unliCallText) {
+        this.dataAllowance = dataAllowance;
+        this.price = price;
+        this.telco = telco;
+        this.unliCallText = unliCallText;
+    }
+
+    public double getTelcoDataAllowance() {
+        return dataAllowance;
+    }
+
+    public double getPromoPrice() {
+        return price;
+    }
+
+    public Telco getTelco() {
+        return telco;
